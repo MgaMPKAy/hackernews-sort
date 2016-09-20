@@ -13,9 +13,7 @@
     }, false);
 
     var nodeList = [];
-
     var node = iterator.nextNode();
-
     while (node) {
         nodeList.push(node);
         node = iterator.nextNode();
@@ -28,33 +26,37 @@
             i += 1;
             continue;
         }
-        var entry = {
-            athingTr: nodeList[i],
-            pointTr: nodeList[i + 1],
-            spacerTr: nodeList[i + 2],
-            score: parseInt(/\d+/.exec(nodeList[i + 1].querySelector('.score').innerHTML)[0])
+        var elems = [];
+        while (nodeList[i].className != "spacer") {
+            elems.push(nodeList[i]);
+            nodeList[i].remove();
+            i++;
+        }
+        elems.push(nodeList[i++]);
+
+        var score = 0;
+        var scoreElem = elems[1].querySelector('.score');
+        if (scoreElem) {
+            score = parseInt(/\d+/.exec(scoreElem.innerHTML)[0])
         }
 
+        var entry = {
+            elems: elems,
+            score: score
+        }
         entryList.push(entry);
-        nodeList[i].remove();
-        nodeList[i + 1].remove();
-        nodeList[i + 2].remove();
-        i += 3;
-
     }
 
     entryList = entryList.sort(function (a, b) {
-
         return b.score - a.score;
-
     });
 
     var tbody = table.childNodes[1];
     var morespace = document.querySelector(".morespace");
 
-    entryList.forEach(function (elem) {
-        tbody.insertBefore(elem.athingTr, morespace);
-        tbody.insertBefore(elem.pointTr, morespace);
-        tbody.insertBefore(elem.spacerTr, morespace);
+    entryList.forEach(function (entry) {
+        entry.elems.forEach(function(elem) {
+            tbody.insertBefore(elem, morespace);
+        });
     });
 })();
