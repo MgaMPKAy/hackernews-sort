@@ -1,0 +1,20 @@
+{
+  "manifest_version": 2,
+  "name": "Hacker News Sort",
+  "author": "Mgam",
+  "description": "Sort Hacker News posts by points",
+  "version": "0.1",
+
+  "permissions": [
+    "tabs",
+    "https://news.ycombinator.com/"
+  ],
+
+  "content_scripts": [
+      {
+          "matches": ["https://news.ycombinator.com/*"],
+          "js": ["hnsort.js"],
+          "run_at": "document_end"
+      }
+  ]
+}
